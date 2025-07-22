@@ -1,6 +1,23 @@
-version: '3.8'
-
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - env.example
+    environment:
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: unless-stopped
   postgres:
     image: ankane/pgvector@sha256:e24d0c7f0e1166b25052f48c2d935b0c74db3b412891a7c70294ee9287ec7427
     env_file:

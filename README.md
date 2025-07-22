@@ -15,10 +15,17 @@ This repository provides a template for building agentic AI projects using Pytho
 ## Project structure
 
 ```
-├── src/            # project code
-├── tests/          # unit tests
-├── docs/           # documentation
-└── .github/        # CI configuration
+├── src/                    # project code
+│   ├── agentic_core/      # core agentic framework
+│   └── sample_agent/      # example agent implementation
+├── tests/                 # unit tests
+├── docs/                  # documentation
+├── .github/               # CI configuration
+├── .devcontainer/         # development container setup
+├── docker-compose.yml     # Docker services configuration
+├── Dockerfile            # Application container configuration
+├── pyproject.toml        # Python project configuration
+└── env.example           # Environment variables template
 ```
 
 ## Agentic Core State Flow
@@ -41,6 +48,8 @@ flowchart LR
 
 
 ## Getting started
+
+### Local Development
 1. Create a virtual environment and install the project in editable mode:
    ```bash
    python -m pip install -e .
@@ -57,6 +66,55 @@ flowchart LR
     for step in plan_graph("Hello world"):
         print(step)
     ```
+
+### Docker Development
+1. Copy the environment file and configure your settings:
+   ```bash
+   cp env.example .env
+   # Edit .env with your API keys and database credentials
+   ```
+
+2. Start the full stack with Docker Compose:
+   ```bash
+   docker compose up --build
+   ```
+
+   This will start:
+   - PostgreSQL database with pgvector extension
+   - Redis cache
+   - The Python application
+
+3. Access the application at `http://localhost:8000`
+
+### Environment Variables
+The following environment variables should be configured in your `.env` file:
+
+- `POSTGRES_USER`: Database username (default: postgres)
+- `POSTGRES_PASSWORD`: Database password (default: password)
+- `POSTGRES_DB`: Database name (default: mydb)
+- `OPENAI_API_KEY`: Your OpenAI API key
+- `CLAUDE_API_KEY`: Your Anthropic Claude API key
+- `LANGCHAIN_API_KEY`: Your LangChain API key
+- `LANGCHAIN_TRACING_V2`: Enable LangChain tracing (default: true)
+- `LANGCHAIN_PROJECT`: LangChain project name (default: agentic-template)
+
+### Troubleshooting
+
+- `LANGCHAIN_PROJECT`: LangChain project name (default: agentic-template)
+
+### Troubleshooting
+
+**Docker Build Issues:**
+- If you encounter SSL certificate errors during Docker build, the Dockerfile includes trusted-host flags for PyPI
+- For corporate networks, you may need to configure Docker to use your proxy settings
+
+**Database Connection:**
+- Ensure the PostgreSQL service is healthy before the app starts (handled by `depends_on` in docker-compose.yml)
+- Check that your `.env` file has correct database credentials
+
+**Missing Dependencies:**
+- If you get import errors, ensure all dependencies are installed: `pip install -e .`
+- For development dependencies: `pip install -e ".[dev]"`
 
 ## Security guidelines
 Secrets should never be committed to the repository. Use environment variables
