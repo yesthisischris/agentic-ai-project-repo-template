@@ -27,7 +27,7 @@ authors = [
 sample-agent = "sample_agent.cli:main"
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-cov==5.*", "ruff", "mypy", "pre-commit"]
+dev = ["pytest>=8", "pytest-cov==7.*", "ruff", "mypy", "pre-commit"]
 docs = ["mkdocs>=1.6", "mkdocs-material"]
 
 [tool.hatch.envs.default]
